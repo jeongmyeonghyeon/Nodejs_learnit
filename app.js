@@ -17,21 +17,21 @@ app.use('/orders', orderRoutes);
 // mongoDB get key
 const db = require('./config/key').mongoURI;
 
-mongoose.connect(db, { userNewUrlParser: true })
+mongoose.connect(db, { useNewUrlParser: true })
     .then(() => console.log('MongoDB Connect!'))
     .catch(err => console.log('MongoDB Connect Error!', err));
 
-app.use((req, res, next) => {
-    res.status(200).json({
-        message: 'It works!'
-    });
-});
+// app.use((req, res, next) => {
+//     res.status(200).json({
+//         message: 'It works!'
+//     });
+// });
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
     error.status = 404;
     next(error);
-})
+});
 
 app.use((error, req, res, next) => {
     res.status(error.status || 500);
@@ -40,6 +40,6 @@ app.use((error, req, res, next) => {
             message: error.message
         }
     })
-})
+});
 
 module.exports = app;
