@@ -6,13 +6,16 @@ const mongoose = require('mongoose');
 
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
+const userRoutes = require('./api/routes/user');
 
 app.use(morgan('dev'));
+app.use('/uploads/', express.static('uploads'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
+app.use('/user', userRoutes);
 
 // mongoDB get key
 const db = require('./config/key').mongoURI;
