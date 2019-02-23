@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const multer = require('multer');
+const multer = require('multer')
 
 const Product = require('../models/products');
 
@@ -76,7 +76,6 @@ router.get('/:productId', (req, res, next) => {
     .exec()
     .then(doc => {
         console.log('From database', doc);
-        console.log('11111', doc);
         if (doc) {
             res.status(200).json({
                 product: doc,
@@ -94,7 +93,7 @@ router.get('/:productId', (req, res, next) => {
     .catch(err => {
         console.log(err);
         res.status(500).json({
-            err: err
+            error: err
         });
     });
 })
@@ -148,9 +147,11 @@ router.post('/', upload.single('productImage'), (req, res, next) => {
 router.patch('/:productId', (req, res, next) => {
     const id = req.params.productId;
     const updateOps = {};
+    console.log('patch', req.body);
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value;
     }
+    console.log('updateOps', updateOps);
     Product.update({ _id: id }, { $set: updateOps })
         .exec()
         .then(result => {
@@ -172,6 +173,7 @@ router.patch('/:productId', (req, res, next) => {
 
 router.delete('/:productId', (req, res, next) => {
     const id = req.params.productId;
+    console.log(id);
     Product.remove({ _id: id })
     .exec()
     .then(result => {

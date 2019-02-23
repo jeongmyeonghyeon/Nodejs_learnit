@@ -7,7 +7,6 @@ const Order = require("../models/orders");
 const Product = require("../models/products");
 
 router.post('/', (req, res, next) => {
-    
     Product.findById(req.body.productId)
         .then(product => {
             if(!product) {
@@ -69,7 +68,7 @@ router.get('/', (req, res, next) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({
-                "err": err
+                "error": err
             });
         });
 

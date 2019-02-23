@@ -59,15 +59,16 @@ router.post('/login', (req, res, next) => {
             // 이메일 아이디 유효성 검사
             if (user.length < 1) {
                 return res.status(401).json({
-                    message: "Auth failed - 1"
+                    message: "Auth failed - user"
                 });
             }
+            console.log('user', user);
             // 패스워드 유효성 검사
             bcrypt.compare(req.body.password, user[0].password, (err, result) => {
 
                 if (err) {
                     return res.status(401).json({
-                        message: "Auth failed"
+                        message: "Auth failed - password"
                     });
                 }
 
