@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-// const checkAuth = require('../middleware/check-auth');
+const checkAuth = require('../middleware/check-auth');
 
 const Order = require("../models/orders");
 const Product = require("../models/products");
 
 router.post('/', (req, res, next) => {
+    
     Product.findById(req.body.productId)
         .then(product => {
             if(!product) {
@@ -44,7 +45,7 @@ router.post('/', (req, res, next) => {
         });
 });
 
-router.get('/', (req, res, next) => {
+router.get('/', checkAuth, (req, res, next) => {
     
     Order.find()
         .select("product quantity _id")
