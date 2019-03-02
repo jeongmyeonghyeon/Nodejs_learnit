@@ -1,14 +1,39 @@
-const express = require('express');
-const router = express.Router();
-const mongoose = require('mongoose');
-const checkAuth = require('../middleware/check-auth');
+const mongoose = require("mongoose");
 
 const Order = require("../models/orders");
 const Product = require("../models/products");
 
-const OrderController = require("../controllers/orders")
+exports.orders_get_all = (req, res, next) => {
+    
+    Order.find()
+        .select("product quantity _id")
+        .exec()
+        .then(docs => {
+            res.status(200).json({
+                count: docs.length,
+                order: docs.map(doc => {
+                    return {
+                        _id: doc._id,
+                        product: doc.product,
+                        quantity: doc.quantity,
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:3000/orders/" + doc._id
+                        }
+                    }
+                })
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                "error": err
+            });
+        });
 
-router.post('/', (req, res, next) => {
+};
+
+exports.orders_create_order = (req, res, next) => {
     
     Product.findById(req.body.productId)
         .then(product => {
@@ -45,9 +70,4 @@ router.post('/', (req, res, next) => {
                 "err": err
             });
         });
-});
-
-router.get('/', checkAuth, OrderController.orders_get_all);
-
-module.exports = router;
-
+};
